@@ -1,0 +1,68 @@
+@import "../functions/parse-radial-gradients";
+
+@debug __parse-radial-gradients() == null;
+@debug __parse-radial-gradients(#fff) == (
+    (
+        'shape': ellipse,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': #fff, 'position': null),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-radial-gradients(#fff 0%) == (
+    (
+        'shape': ellipse,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-radial-gradients((#fff 0%,)) == (
+    (
+        'shape': ellipse,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-radial-gradients(#fff 0%, #000 100%) == (
+    (
+        'shape': ellipse,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': #000, 'position': 100%)
+        )
+    ),
+);
+@debug __parse-radial-gradients((#fff 0%, #000 100%), (circle, red 25%, green 75%)) == (
+    (
+        'shape': ellipse,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': #000, 'position': 100%)
+        )
+    ),
+    (
+        'shape': circle,
+        'size': farthest-corner,
+        'position': ('x': center, 'y': center),
+        'color-stops': (
+            ('color': red, 'position': 25%),
+            ('color': green, 'position': 75%)
+        )
+    ),
+);
+@debug __parse-radial-gradients((#fff 0%, #000 100%), (UNEXPECTEDVALUE,)) == null;

@@ -1,0 +1,60 @@
+@import "base-mixins";
+
+// Initial: border-box
+//
+// Syntax: <box>#
+//
+//         where
+//
+//         <box> = border-box | padding-box | content-box
+//
+@mixin background-clip($clips...) {
+    $short-clips: ();
+    @each $clip in $clips {
+        $short-clip: if($clip == border-box, border, if($clip == padding-box, padding, $clip));
+        $short-clips: append($short-clips, $short-clip);
+    }
+    @include prefixed-property(background-clip, (
+        -webkit: $clips,
+        -moz: $short-clips,
+        '': $clips,
+    ));
+}
+
+// Initial: padding-box
+//
+// Syntax: <box>#
+//
+//         where
+//
+//         <box> = border-box | padding-box | content-box
+//
+@mixin background-origin($origins...) {
+    $short-origins: ();
+    @each $origin in $origins {
+        $short-origin: if($origin == border-box, border, if($origin == padding-box, padding, $origin));
+        $short-origins: append($short-origins, $short-origin);
+    }
+    @include prefixed-property(background-origin, (
+        -webkit: $origins,
+        -moz: $short-origins,
+        '': $origins,
+    ));
+}
+
+// Initial: auto
+//
+// Syntax: <bg-size>#
+//
+//         where
+//
+//         <bg-size> = [<length> | <percentage> | auto]{1, 2} | cover | contain
+//
+@mixin background-size($sizes...) {
+    @include prefixed-property(background-size, $sizes, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}

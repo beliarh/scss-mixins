@@ -1,0 +1,23 @@
+@import "base-functions";
+@import "parse-linear-gradient";
+
+@function __parse-linear-gradients($linear-gradients...) {
+    $linear-gradients: unwrap-list($linear-gradients, true);
+    @if length($linear-gradients) == 0 {
+        // <EMPTY-LIST>
+        @return null;
+    }
+    @if is-space-separated(nth($linear-gradients, 1)) {
+        $linear-gradients: ($linear-gradients,);
+    }
+    $parsed-linear-gradients: ();
+    @each $linear-gradient in $linear-gradients {
+        $parsed-linear-gradient: __parse-linear-gradient($linear-gradient);
+        @if not $parsed-linear-gradient {
+            // Incorrect linear-gradient
+            @return null;
+        }
+        $parsed-linear-gradients: append($parsed-linear-gradients, $parsed-linear-gradient, comma);
+    }
+    @return $parsed-linear-gradients;
+}

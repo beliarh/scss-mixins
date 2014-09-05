@@ -1,0 +1,14 @@
+@import "base-mixins";
+
+// Initial: text
+//
+// Syntax: none | text | toggle | element | elements | all
+//
+@mixin user-select($value) {
+    @include prefixed-property(user-select, (
+        -webkit: $value,
+        -moz: if($value == none, -moz-none, $value),
+        -ms: $value,
+        '': $value,
+    ));
+}

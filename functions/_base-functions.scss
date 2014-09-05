@@ -1,0 +1,120 @@
+@function is-string($value) {
+    @return type-of($value) == string;
+}
+
+@function is-number($value) {
+    @return type-of($value) == number;
+}
+
+@function is-color($value) {
+    @return type-of($value) == color or (is-string($value) and to-lower-case($value) == currentcolor);
+}
+
+@function is-list($value) {
+    @return type-of($value) == list;
+}
+
+@function is-arglist($value) {
+    @return type-of($value) == arglist;
+}
+
+@function is-list-like($value) {
+    @return is-list($value) or is-arglist($value);
+}
+
+@function is-comma-separated($value) {
+    @return list-separator($value) == comma;
+}
+
+@function is-space-separated($value) {
+    @return list-separator($value) == space;
+}
+
+@function is-comma-list($value) {
+    @return is-list($value) and is-comma-separated($value);
+}
+
+@function is-space-list($value) {
+    @return is-list($value) and is-space-separated($value);
+}
+
+@function is-map($value) {
+    @return type-of($value) == map;
+}
+
+@function is-percentage($value) {
+    @return is-number($value) and unit($value) == '%';
+}
+
+@function is-length($value) {
+    @return is-number($value) and not not index(em ex ch rem vh vw vmin vmax px mm cm in pt pc, unit($value));
+}
+
+@function is-angle($value) {
+    @if is-number($value) and index(deg grad rad turn, unit($value)) {
+        @return true;
+    }
+    @return false;
+}
+
+@function is-width($value) {
+    @return $value == auto or is-length($value) or is-percentage($value);
+}
+
+@function is-side-or-corner($value) {
+    @if is-space-separated($value) {
+        $length: length($value);
+        $arg1: nth($value, 1);
+        @if $length == 1 {
+            @return not not index(left right top bottom, $arg1);
+        }
+        @if $length == 2 {
+            @if index(left right, $arg1) {
+                @return not not index(top bottom, nth($value, 2));
+            }
+            @if index(top bottom, $arg1) {
+                @return not not index(left right, nth($value, 2));
+            }
+        }
+    }
+    @return false;
+}
+
+@function is-extent-keyword($value) {
+    @return not not index(closest-corner closest-side farthest-corner farthest-side, $value);
+}
+
+@function is-time($value) {
+    @return is-number($value) and not not index(ms s, unit($value));
+}
+
+@function is-timing-function($value) {
+    @if is-string($value) {
+        @if index(ease linear ease-in ease-out ease-in-out step-start step-end, $value) {
+            @return true;
+        }
+        @if str-slice($value, 1, 6) == 'steps(' and str-slice($value, -1) == ')' {
+            @return true;
+        }
+        @if str-slice($value, 1, 13) == 'cubic-bezier(' and str-slice($value, -1) == ')' {
+            @return true;
+        }
+    }
+    @return false;
+}
+
+@function slice-list($list, $from: 1, $to: length($list)) {
+    $slice: join((), (), list-separator($list));
+    @for $i from $from through $to {
+        $slice: append($slice, nth($list, $i));
+    }
+    @return $slice;
+}
+
+@function unwrap-list($list, $arglist-only: false) {
+    $list-types: if($arglist-only, arglist, list arglist);
+    @while index($list-types, type-of($list)) and length($list) == 1 {
+        $list: nth($list, 1);
+    }
+    @return $list;
+}

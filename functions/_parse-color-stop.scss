@@ -1,0 +1,43 @@
+@import "base-functions";
+
+@function __parse-color-stop($color-stop) {
+    @if is-comma-separated($color-stop) {
+        // <COMMA-LIST>
+        @return null;
+    }
+    $length: length($color-stop);
+    @if not ($length >= 1 and $length <= 2) {
+        // Incorrect arguments count.
+        @return null;
+    }
+    $arg1: unquote(nth($color-stop, 1));
+    @if not is-color($arg1) {
+        // <UNEXPECTED-VALUE> ...
+        @return null;
+    }
+    // <color> ...
+    @if $length == 1 {
+        // <color>
+        @return (
+            'color': $arg1,
+            'position': null
+        );
+    }
+    $arg2: nth($color-stop, 2);
+    @if is-length($arg2) or is-percentage($arg2) {
+        // <color> [<length> | <percentage>]
+        @return (
+            'color': $arg1,
+            'position': $arg2
+        );
+    } @else if is-number($arg2) and unitless($arg2) {
+        // <color> <number>
+        @return (
+            'color': $arg1,
+            'position': $arg2 * 1px
+        );
+    } @else {
+        // <color> <UNEXPECTED-VALUE>
+        @return null;
+    }
+}

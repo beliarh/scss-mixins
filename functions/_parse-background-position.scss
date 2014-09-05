@@ -1,0 +1,49 @@
+@import "base-functions";
+
+@function __parse-background-position($background-position) {
+    @if is-comma-separated($background-position) {
+        // <COMMA-LIST>
+        @return null;
+    }
+    $length: length($background-position);
+    @if not ($length >= 1 and $length <= 2) {
+        // Incorrect arguments count
+        @return null;
+    }
+    $arg1: unquote(nth($background-position, 1));
+    @if is-length($arg1) or is-percentage($arg1) or index(left center right, $arg1) {
+        // [<length> | <percentage> | left | center | right] ...
+        @if $length == 1 {
+            // [<length> | <percentage> | left | center | right]
+            @return ('x': $arg1, 'y': center);
+        }
+        $arg2: unquote(nth($background-position, 2));
+        @if is-length($arg2) or is-percentage($arg2) or index(top center bottom, $arg2) {
+            // [<length> | <percentage> | left | center | right] [<length> | <percentage> | top | center | bottom]
+            @return ('x': $arg1, 'y': $arg2);
+        } @else if $arg1 == center and index(left right, $arg2) {
+            // center [left | right]
+            @return ('x': $arg2, 'y': $arg1);
+        } @else {
+            // [<length> | <percentage> | left | center | right] <UNEXPECTED-VALUE>
+            @return null;
+        }
+    } @else if index(top center bottom, $arg1) {
+        // [top | center | bottom] ...
+        @if $length == 1 {
+            // [top | center | bottom]
+            @return ('x': center, 'y': $arg1);
+        }
+        $arg2: unquote(nth($background-position, 2));
+        @if index(left center right, $arg2) {
+            // [top | center | bottom] [left | center | right]
+            @return ('x': $arg2, 'y': $arg1);
+        } @else {
+            // [top | center | bottom] <UNEXPECTED-VALUE>
+            @return null;
+        }
+    } @else {
+        // <UNEXPECTED-VALUE>
+        @return null;
+    }
+}

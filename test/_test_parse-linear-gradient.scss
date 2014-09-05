@@ -1,0 +1,55 @@
+@import "../functions/parse-linear-gradient";
+
+@debug __parse-linear-gradient() == null;
+@debug __parse-linear-gradient(()) == null;
+@debug __parse-linear-gradient((0deg,), #fff) == null;
+@debug __parse-linear-gradient(#fff) == (
+    'angle': 180deg,
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-linear-gradient(#fff 0%) == (
+    'angle': 180deg,
+    'color-stops': (
+        ('color': #fff, 'position': 0%),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-linear-gradient((), #fff) == null;
+@debug __parse-linear-gradient(0deg) == null;
+@debug __parse-linear-gradient(to right) == null;
+@debug __parse-linear-gradient(0deg, #fff) == (
+    'angle': 0deg,
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-linear-gradient(to, #fff) == null;
+@debug __parse-linear-gradient(to right, #fff) == (
+    'angle': 90deg,
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-linear-gradient(to UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-linear-gradient(UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-linear-gradient(#fff, UNEXPECTEDVALUE) == null;
+@debug __parse-linear-gradient(0deg, UNEXPECTEDVALUE) == null;
+@debug __parse-linear-gradient(#fff, #000) == (
+    'angle': 180deg,
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null)
+    )
+);
+@debug __parse-linear-gradient(0deg, #fff, #000) == (
+    'angle': 0deg,
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null)
+    )
+);

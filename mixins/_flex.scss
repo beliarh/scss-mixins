@@ -1,0 +1,130 @@
+@import "../functions/parse-flex";
+@import "base-mixins";
+
+@mixin flexbox {
+    @include prefixed-value(display, box, (
+        -webkit,
+        -moz,
+    ));
+    @include prefixed-value(display, flexbox, (
+        -ms,
+    ));
+    @include prefixed-value(display, flex, (
+        -webkit,
+        '',
+    ));
+}
+
+@mixin inline-flexbox {
+    @include prefixed-value(display, inline-box, (
+        -webkit,
+        -moz,
+    ));
+    @include prefixed-value(display, inline-flexbox, (
+        -ms,
+    ));
+    @include prefixed-value(display, inline-flex, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: 0 1 auto
+//
+// Syntax: none | [<flex-grow> <flex-shrink>? || <flex-basis>]
+//
+@mixin flex($value) {
+    $parsed-value: __parse-flex($value);
+    @if not $parsed-value {
+        @warn 'Incorrect flex value: #{inspect($value)}.';
+    } @else {
+        @if $parsed-value != none {
+            $grow: map-get($parsed-value, 'grow');
+            @include prefixed-property(box-flex, $grow, (
+                -webkit,
+                -moz,
+            ));
+        }
+        @include prefixed-property(flex, $value, (
+            -webkit,
+            -ms,
+            '',
+        ));
+    }
+}
+
+// Initial: 0
+//
+// Syntax: <number>
+//
+@mixin flex-grow($value) {
+    @include prefixed-property(box-flex, $value, (
+        -webkit,
+        -moz,
+    ));
+    @include prefixed-property(flex-grow, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}
+
+// Initial: 1
+//
+// Syntax: <number>
+//
+@mixin flex-shrink($value) {
+    @include prefixed-property(flex-shrink, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}
+
+// Initial: auto
+//
+// Syntax: auto | <width>
+//
+@mixin flex-basis($value) {
+    @include prefixed-property(flex-basis, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}
+
+// Initial: row nowrap
+//
+// Syntax: <flex-direction> || <flex-wrap>
+//
+@mixin flex-flow($value) {
+    @include prefixed-property(flex-flow, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}
+
+// Initial: row
+//
+// Syntax: row | row-reverse | column | column-reverse
+//
+@mixin flex-direction($value) {
+    @include prefixed-property(flex-direction, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}
+
+// Initial: nowrap
+//
+// Syntax: nowrap | wrap | wrap-reverse
+//
+@mixin flex-wrap($value) {
+    @include prefixed-property(flex-wrap, $value, (
+        -webkit,
+        -ms,
+        '',
+    ));
+}

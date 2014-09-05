@@ -1,0 +1,213 @@
+@import "../functions/parse-transition";
+
+@debug __parse-transition((all, 0s, ease, 0s)) == null;
+@debug __parse-transition(all 0s ease 0s none) == null;
+@debug __parse-transition(()) == null;
+@debug __parse-transition(0%) == null;
+@debug __parse-transition(left top) == null;
+@debug __parse-transition(1s 2s 3s) == null;
+@debug __parse-transition(ease linear) == null;
+@debug __parse-transition(none) == (
+    'property': none,
+    'duration': 0s,
+    'function': ease,
+    'delay': 0s
+);
+@debug __parse-transition(left) == (
+    'property': left,
+    'duration': 0s,
+    'function': ease,
+    'delay': 0s
+);
+@debug __parse-transition(left 1s) == (
+    'property': left,
+    'duration': 1s,
+    'function': ease,
+    'delay': 0s
+);
+@debug __parse-transition(left linear) == (
+    'property': left,
+    'duration': 0s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(left 1s linear) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(left 1s 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': ease,
+    'delay': 2s
+);
+@debug __parse-transition(left 1s linear 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(left 1s 2s linear) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(left linear 1s 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s) == (
+    'property': all,
+    'duration': 1s,
+    'function': ease,
+    'delay': 0s
+);
+@debug __parse-transition(1s left) == (
+    'property': left,
+    'duration': 1s,
+    'function': ease,
+    'delay': 0s
+);
+@debug __parse-transition(1s linear) == (
+    'property': all,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(1s 2s) == (
+    'property': all,
+    'duration': 1s,
+    'function': ease,
+    'delay': 2s
+);
+@debug __parse-transition(1s left linear) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(1s left 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': ease,
+    'delay': 2s
+);
+@debug __parse-transition(1s linear left) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(1s linear 2s) == (
+    'property': all,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s 2s left) == (
+    'property': left,
+    'duration': 1s,
+    'function': ease,
+    'delay': 2s
+);
+@debug __parse-transition(1s 2s linear) == (
+    'property': all,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s left linear 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s left 2s linear) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s linear left 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s linear 2s left) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s 2s left linear) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(1s 2s linear left) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(linear) == (
+    'property': all,
+    'duration': 0s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(linear left) == (
+    'property': left,
+    'duration': 0s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(linear 1s) == (
+    'property': all,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(linear left 1s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(linear 1s left) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 0s
+);
+@debug __parse-transition(linear 1s 2s) == (
+    'property': all,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(linear left 1s 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(linear 1s left 2s) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);
+@debug __parse-transition(linear 1s 2s left) == (
+    'property': left,
+    'duration': 1s,
+    'function': linear,
+    'delay': 2s
+);

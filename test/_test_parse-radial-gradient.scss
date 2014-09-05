@@ -1,0 +1,548 @@
+@import "../functions/parse-radial-gradient";
+
+@debug __parse-radial-gradient() == null;
+@debug __parse-radial-gradient(()) == null;
+@debug __parse-radial-gradient((circle,), #fff) == null;
+@debug __parse-radial-gradient(#fff) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(#fff 0%) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': 0%),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle) == null;
+@debug __parse-radial-gradient((), #fff) == null;
+@debug __parse-radial-gradient(circle, #fff) == (
+    'shape': circle,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle, #fff 0%) == (
+    'shape': circle,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': 0%),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle at, #fff) == null;
+@debug __parse-radial-gradient(circle at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': farthest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle 100px, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle closest-corner, #fff) == (
+    'shape': circle,
+    'size': closest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle 100px at, #fff) == null;
+@debug __parse-radial-gradient(circle closest-corner at, #fff) == null;
+@debug __parse-radial-gradient(circle 100px at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle closest-corner at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': closest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle 100px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle closest-corner at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle 100px UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle closest-corner UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px at, #fff) == null;
+@debug __parse-radial-gradient(100px at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px circle, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px circle at, #fff) == null;
+@debug __parse-radial-gradient(100px circle at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px circle at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px circle UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 200px, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 200px at, #fff) == null;
+@debug __parse-radial-gradient(100px 50% at, #fff) == null;
+@debug __parse-radial-gradient(100px 200px at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 50% at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 200px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 50% at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 200px ellipse, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 50% ellipse, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 200px ellipse at, #fff) == null;
+@debug __parse-radial-gradient(100px 50% ellipse at, #fff) == null;
+@debug __parse-radial-gradient(100px 200px ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 50% ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(100px 200px ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 50% ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 200px ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 50% ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 200px UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px 50% UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(100px UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse, #fff) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse at, #fff) == null;
+@debug __parse-radial-gradient(ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50%, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px 200px, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 100px 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 50% 100px, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 50% 100%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 100px 200px at, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px 50% at, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50% 100px at, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50% 100% at, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px 200px at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 200px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 100px 50% at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 100px 50%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 50% 100px at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 50% 100% at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse 100px 200px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px 50% at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50% 100px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50% 100% at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 100px UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse 50% UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse closest-corner, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse closest-corner at, #fff) == null;
+@debug __parse-radial-gradient(ellipse closest-corner at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(ellipse closest-corner at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse closest-corner UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50%, #fff) == null;
+@debug __parse-radial-gradient(50% 100px, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100px at, #fff) == null;
+@debug __parse-radial-gradient(50% 100% at, #fff) == null;
+@debug __parse-radial-gradient(50% 100px at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100% at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100px at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100% at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100px ellipse, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100% ellipse, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100px ellipse at, #fff) == null;
+@debug __parse-radial-gradient(50% 100% ellipse at, #fff) == null;
+@debug __parse-radial-gradient(50% 100px ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100px,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100% ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': 50% 100%,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(50% 100px ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100% ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100px ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100% ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100px UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% 100% UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(50% UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner at, #fff) == null;
+@debug __parse-radial-gradient(closest-corner at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner circle, #fff) == (
+    'shape': circle,
+    'size': closest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner ellipse, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner circle at, #fff) == null;
+@debug __parse-radial-gradient(closest-corner ellipse at, #fff) == null;
+@debug __parse-radial-gradient(closest-corner circle at 50% 50%, #fff) == (
+    'shape': circle,
+    'size': closest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner ellipse at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': closest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(closest-corner circle at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner ellipse at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner circle UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner ellipse UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(closest-corner UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(at, #fff) == null;
+@debug __parse-radial-gradient(at 50% 50%, #fff) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': 50%, 'y': 50%),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': transparent, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(at UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(UNEXPECTEDVALUE, #fff) == null;
+@debug __parse-radial-gradient(circle, #fff, #000) == (
+    'shape': circle,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(circle, #fff, #000, #fff) == (
+    'shape': circle,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null),
+        ('color': #fff, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(#fff, #000) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null)
+    )
+);
+@debug __parse-radial-gradient(#fff, #000, #fff) == (
+    'shape': ellipse,
+    'size': farthest-corner,
+    'position': ('x': center, 'y': center),
+    'color-stops': (
+        ('color': #fff, 'position': null),
+        ('color': #000, 'position': null),
+        ('color': #fff, 'position': null)
+    )
+);

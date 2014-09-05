@@ -1,0 +1,122 @@
+@import "../functions/helpers";
+@import "../functions/parse-transitions";
+@import "base-mixins";
+
+// Initial: none
+//
+// Syntax: <single-transition>#
+//
+//         where
+//
+//         <single-transition> = [none | <single-transition-property>]
+//                               ||
+//                               <single-transition-duration>
+//                               ||
+//                               <single-transition-timing-function>
+//                               ||
+//                               <single-transition-delay>
+//
+@mixin transition($transitions...) {
+    $parsed-transitions: __parse-transitions($transitions);
+    @if not $parsed-transitions {
+        @warn 'Incorrect transition list: #{inspect($transitions)}.';
+    } @else {
+        $webkit-transitions: ();
+        $moz-transitions: ();
+        $o-transitions: ();
+        $transitions: ();
+        @each $parsed-transition in $parsed-transitions {
+            $property: map-get($parsed-transition, 'property');
+            $duration: map-get($parsed-transition, 'duration');
+            $function: map-get($parsed-transition, 'function');
+            $delay: map-get($parsed-transition, 'delay');
+            $prefixed-property: __prefix-transition-properties($property);
+            $webkit-property: map-get($prefixed-property, '-webkit');
+            $moz-property: map-get($prefixed-property, '-moz');
+            $o-property: map-get($prefixed-property, '-o');
+            $webkit-transitions: append($webkit-transitions, $webkit-property $duration $function $delay, comma);
+            $moz-transitions: append($moz-transitions, $moz-property $duration $function $delay, comma);
+            $o-transitions: append($o-transitions, $o-property $duration $function $delay, comma);
+            $transitions: append($transitions, $property $duration $function $delay, comma);
+        }
+        @include prefixed-property(transition, (
+            -webkit: $webkit-transitions,
+            -moz: $moz-transitions,
+            -o: $o-transitions,
+            '': $transitions,
+        ));
+    }
+}
+
+// Initial: all
+//
+// Syntax: none | <single-transition-property>#
+//
+//         where
+//
+//         <single-transition-property> = all | <IDENT>
+//
+@mixin transition-property($properties...) {
+    $prefixed-properties: __prefix-transition-properties($properties);
+    @include prefixed-property(transition-property, (
+        -webkit: map-get($prefixed-properties, '-webkit'),
+        -moz: map-get($prefixed-properties, '-moz'),
+        -o: map-get($prefixed-properties, '-o'),
+        '': $properties,
+    ));
+}
+
+// Initial: 0s
+//
+// Syntax: <time>#
+//
+@mixin transition-duration($durations...) {
+    @include prefixed-property(transition-duration, $durations, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: ease
+//
+// Syntax: <single-timing-function>#
+//
+//         where
+//
+//         <single-timing-function> = ease | linear | ease-in | ease-out | ease-in-out | step-start | step-end
+//                                    |
+//                                    steps(<integer> [, [start | end]]?)
+//                                    |
+//                                    cubic-bezier(<number>, <number>, <number>, <number>)
+//
+//         ease        = cubic-bezier(0.25, 0.1, 0.25, 1.0)
+//         linear      = cubic-bezier(0.0,  0.0, 1.0,  1.0)
+//         ease-in     = cubic-bezier(0.42, 0,   1.0,  1.0)
+//         ease-out    = cubic-bezier(0,    0,   0.58, 1.0)
+//         ease-in-out = cubic-bezier(0.42, 0,   0.58, 1.0)
+//         step-start  = steps(1, start)
+//         step-end    = steps(1, end)
+//
+@mixin transition-timing-function($timing-functions...) {
+    @include prefixed-property(transition-timing-function, $timing-functions, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 0s
+//
+// Syntax: <time>#
+//
+@mixin transition-delay($delays...) {
+    @include prefixed-property(transition-delay, $delays, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}

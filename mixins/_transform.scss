@@ -1,0 +1,242 @@
+@import "base-mixins";
+
+// Initial: none
+//
+// Syntax: none | <transform-function>+
+//
+//         where
+//
+//         <transform-function> = <matrix()> | <matrix3d()>
+//                                |
+//                                <rotate()> | <rotate3d()> | <rotateX()> | <rotateY()> | <rotateZ()>
+//                                |
+//                                <scale()> | <scale3d()> | <scaleX()> | <scaleY()> | <scaleZ()>
+//                                |
+//                                <skew()> | <skewX()> | <skewY()>
+//                                |
+//                                <translate()> | <translate3d()> | <translateX()> | <translateY()> | <translateZ()>
+//
+@mixin transform($functions...) {
+    @include prefixed-property(transform, $functions, (
+        -webkit,
+        -moz,
+        -ms,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 1, 0, 0, 1, 0, 0
+//
+//          a  b  tx          1  0  0
+//                      =
+//          c  d  ty          0  1  0
+//
+// Syntax: <number> [, <number>]{5, 5}
+//
+@mixin transform-matrix($a, $b, $c, $d, $tx, $ty) {
+    @include transform(unquote('matrix(#{$a}, #{$b}, #{$c}, #{$d}, #{$tx}, #{$ty})'));
+}
+
+// Initial: 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+//
+//          a1 a2 a3 a4       1  0  0  0
+//
+//          b1 b2 b3 b4       0  1  0  0
+//                        =
+//          c1 c2 c3 c4       0  0  1  0
+//
+//          d1 d2 d3 d4       0  0  0  1
+//
+// Syntax: <number> [, <number>]{15, 15}
+//
+@mixin transform-matrix3d($a1, $b1, $c1, $d1, $a2, $b2, $c2, $d2, $a3, $b3, $c3, $d3, $a4, $b4, $c4, $d4) {
+    $col1: '#{$a1}, #{$b1}, #{$c1}, #{$d1}';
+    $col2: '#{$a2}, #{$b2}, #{$c2}, #{$d2}';
+    $col3: '#{$a3}, #{$b3}, #{$c3}, #{$d3}';
+    $col4: '#{$a4}, #{$b4}, #{$c4}, #{$d4}';
+    @include transform(unquote('matrix3d(#{$col1}, #{$col2}, #{$col3}, #{$col4})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-rotate($angle) {
+    @include transform(unquote('rotate(#{$angle})'));
+}
+
+// Initial: 0, 0, 1, 0deg
+//
+// Syntax: <vector-x>, <vector-y>, <vector-z>, <angle>
+//
+//         where
+//
+//         <vector-x> = <number>
+//         <vector-y> = <number>
+//         <vector-z> = <number>
+//
+@mixin transform-rotate3d($x, $y, $z, $angle) {
+    @include transform(unquote('rotate3d(#{$x}, #{$y}, #{$z}, #{$angle})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-rotateX($angle) {
+    @include transform(unquote('rotateX(#{$angle})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-rotateY($angle) {
+    @include transform(unquote('rotateY(#{$angle})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-rotateZ($angle) {
+    @include transform(unquote('rotateZ(#{$angle})'));
+}
+
+// Initial: 1, 1
+//
+// Syntax: <scale-x> [, <scale-y>]?
+//
+@mixin transform-scale($x, $y: $x) {
+    @include transform(unquote('scale(#{$x}, #{$y})'));
+}
+
+// Initial: 1, 1, 1
+//
+// Syntax: <scale-x>, <scale-y>, <scale-z>
+//
+@mixin transform-scale3d($x, $y, $z) {
+    @include transform(unquote('scale3d(#{$x}, #{$y}, #{$z})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number>
+//
+@mixin transform-scaleX($value) {
+    @include transform(unquote('scaleX(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number>
+//
+@mixin transform-scaleY($value) {
+    @include transform(unquote('scaleY(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number>
+//
+@mixin transform-scaleZ($value) {
+    @include transform(unquote('scaleZ(#{$value})'));
+}
+
+// Initial: 0deg, 0deg
+//
+// Syntax: <skew-x> [, <skew-y>]?
+//
+@mixin transform-skew($x, $y) {
+    @include transform(unquote('skew(#{$x}, #{$y})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-skewX($angle) {
+    @include transform(unquote('skewX(#{$angle})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin transform-skewY($angle) {
+    @include transform(unquote('skewY(#{$angle})'));
+}
+
+// Initial: 0px, 0px
+//
+// Syntax: <translate-x> [, <translate-y>]?
+//
+@mixin transform-translate($x, $y) {
+    @include transform(unquote('translate(#{$x}, #{$y})'));
+}
+
+// Initial: 0px, 0px, 0px
+//
+// Syntax: <translate-x>, <translate-y>, <translate-z>
+//
+@mixin transform-translate3d($x, $y, $z) {
+    @include transform(unquote('translate3d(#{$x}, #{$y}, #{$z})'));
+}
+
+// Initial: 0px
+//
+// Syntax: <number> | <length>
+//
+@mixin transform-translateX($value) {
+    @include transform(unquote('translateX(#{$value})'));
+}
+
+// Initial: 0px
+//
+// Syntax: <number> | <length>
+//
+@mixin transform-translateY($value) {
+    @include transform(unquote('translateY(#{$value})'));
+}
+
+// Initial: 0px
+//
+// Syntax: <length>
+//
+@mixin transform-translateZ($value) {
+    @include transform(unquote('translateZ(#{$value})'));
+}
+
+// Initial: 50% 50%
+//
+// Syntax: <position>
+//
+//         where
+//
+//         <position> = [[<percentage> | <length> | left | center | right]
+//                       [<percentage> | <length> | top | center | bottom]?]
+//                       |
+//                       [[left | center | right] || [top | center | bottom]]
+//
+@mixin transform-origin($value) {
+    @include prefixed-property(transform-origin, $value, (
+        -webkit,
+        -moz,
+        -ms,
+        -o,
+        '',
+    ));
+}
+
+// Initial: flat
+//
+// Syntax: flat | preserve-3d
+//
+@mixin transform-style($value) {
+    @include prefixed-property(transform-style, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}

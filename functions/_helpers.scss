@@ -1,0 +1,147 @@
+@import "base-functions";
+
+@function __angle-to-webkit-gradient-direction($angle) {
+    $angle: $angle % 360deg;
+    $one-sixteenth: 360deg / 16;
+    @if $angle >= $one-sixteenth * 15 or  $angle < $one-sixteenth *  1 {
+        @return (center bottom, center top);
+    }
+    @if $angle >= $one-sixteenth *  1 and $angle < $one-sixteenth *  3 {
+        @return (left bottom, right top);
+    }
+    @if $angle >= $one-sixteenth *  3 and $angle < $one-sixteenth *  5 {
+        @return (left center, right center);
+    }
+    @if $angle >= $one-sixteenth *  5 and $angle < $one-sixteenth *  7 {
+        @return (left top, right bottom);
+    }
+    @if $angle >= $one-sixteenth *  7 and $angle < $one-sixteenth *  9 {
+        @return (center top, center bottom);
+    }
+    @if $angle >= $one-sixteenth *  9 and $angle < $one-sixteenth * 11 {
+        @return (right top, left bottom);
+    }
+    @if $angle >= $one-sixteenth * 11 and $angle < $one-sixteenth * 13 {
+        @return (right center, left center);
+    }
+    @if $angle >= $one-sixteenth * 13 and $angle < $one-sixteenth * 15 {
+        @return (right bottom, left top);
+    }
+}
+
+@function __parsed-color-stops-to-list($parsed-color-stops) {
+    $color-stops: ();
+    @each $parsed-color-stop in $parsed-color-stops {
+        $color: map-get($parsed-color-stop, 'color');
+        $position: map-get($parsed-color-stop, 'position');
+        $color-stop: if($position, $color $position, $color);
+        $color-stops: append($color-stops, $color-stop, comma);
+    }
+    @return $color-stops;
+}
+
+@function __parsed-color-stops-to-webkit-color-stops($parsed-color-stops) {
+    $length: length($parsed-color-stops);
+    @if $length < 2 {
+        @return null;
+    }
+    $color-stops: ();
+    $color-stop-maps: ();
+    $colors-buffer: ();
+    @for $i from 1 through $length {
+        $parsed-color-stop: nth($parsed-color-stops, $i);
+        $color: map-get($parsed-color-stop, 'color');
+        $position: map-get($parsed-color-stop, 'position');
+        @if $position == null {
+            @if $i == 1 {
+                $position: 0%;
+            } @else if $i == $length {
+                $position: 100%;
+            }
+        }
+        @if ($i == $length or is-percentage($position)) and length($colors-buffer) > 0 {
+            $last-index: length($color-stop-maps);
+            $last-color-stop: nth($color-stop-maps, $last-index);
+            $last-position: map-get($last-color-stop, 'position');
+            $increment: ($position - $last-position) / ($i - $last-index);
+            @each $buffered-color in $colors-buffer {
+                $last-position: $last-position + $increment;
+                $color-stop: unquote('color-stop(#{$last-position}, #{$buffered-color})');
+                $color-stops: append($color-stops, $color-stop, comma);
+                $color-stop-map: ('color': $buffered-color, 'position': $last-position);
+                $color-stop-maps: append($color-stop-maps, $color-stop-map);
+            }
+            $colors-buffer: ();
+        }
+        @if $position == null {
+            $colors-buffer: append($colors-buffer, $color);
+        } @else if is-percentage($position) {
+            $color-stop: unquote('color-stop(#{$position}, #{$color})');
+            $color-stops: append($color-stops, $color-stop, comma);
+            $color-stop-map: ('color': $color, 'position': $position);
+            $color-stop-maps: append($color-stop-maps, $color-stop-map);
+        } @else {
+            @return null;
+        }
+    }
+    @return $color-stops;
+}
+
+@function __prefix-transition-properties($properties...) {
+    $properties: unwrap-list($properties);
+    $webkit-properties: ();
+    $moz-properties: ();
+    $o-properties: ();
+    @each $property in $properties {
+        $webkit-property: $property;
+        $moz-property: $property;
+        $o-property: $property;
+        $prefixes: map-get((
+            'transform': -webkit -moz -o,
+            'transform-origin': -webkit -moz -o,
+            'perspective': -webkit -moz,
+            'perspective-origin': -webkit -moz,
+            'column-width': -webkit -moz,
+            'column-count': -webkit -moz,
+            'column-gap': -webkit -moz,
+            'column-rule': -webkit -moz,
+            'column-rule-color': -webkit -moz,
+            'column-rule-width': -webkit -moz,
+            'flex': -webkit,
+            'flex-basis': -webkit,
+            'background-size': -webkit -moz -o,
+            'border-radius': -webkit -moz,
+            'box-shadow': -webkit -moz,
+        ), $property);
+        @if $prefixes {
+            @if index($prefixes, -webkit) {
+                $webkit-property: -webkit-#{$property};
+            }
+            @if index($prefixes, -moz) {
+                $moz-property: -moz-#{$property};
+            }
+            @if index($prefixes, -o) {
+                $o-property: -o-#{$property};
+            }
+        } @else {
+            $moz-single-border-radius: map-get((
+                'border-top-left-radius': -moz-border-radius-topleft,
+                'border-top-right-radius': -moz-border-radius-topright,
+                'border-bottom-left-radius': -moz-border-radius-bottomleft,
+                'border-bottom-right-radius': -moz-border-radius-bottomright,
+            ), $property);
+            @if $moz-single-border-radius {
+                $webkit-property: -webkit-#{$property};
+                $moz-property: $moz-single-border-radius;
+            }
+        }
+        $webkit-properties: append($webkit-properties, $webkit-property, comma);
+        $moz-properties: append($moz-properties, $moz-property, comma);
+        $o-properties: append($o-properties, $o-property, comma);
+    }
+    @return (
+        '-webkit': $webkit-properties,
+        '-moz': $moz-properties,
+        '-o': $o-properties,
+    );
+}

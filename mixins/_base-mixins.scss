@@ -1,0 +1,49 @@
+@import "../functions/base-functions";
+
+@mixin prefixed-property($property, $value, $prefixes...) {
+    $values: ();
+    @if is-map($value) {
+        @each $prefix, $value in $value {
+            @if length($value) > 0 {
+                $values: append($values, ($prefix, $value));
+            }
+        }
+    } @else {
+        @if length($value) > 0 {
+            $prefixes: unwrap-list($prefixes);
+            @each $prefix in $prefixes {
+                $values: append($values, ($prefix, $value));
+            }
+        }
+    }
+    @each $prefix, $value in $values {
+        $prefix: if(is-string($prefix) and str-length($prefix) > 0, '#{$prefix}-', '');
+        #{$prefix}#{$property}: $value;
+    }
+}
+
+@mixin prefixed-value($property, $value, $prefixes...) {
+    $values: ();
+    @if is-map($value) {
+        @each $prefix, $value in $value {
+            @if $value and length($value) > 0 {
+                $values: append($values, ($prefix, $value));
+            }
+        }
+    } @else {
+        @if $value and length($value) > 0 {
+            $prefixes: unwrap-list($prefixes);
+            @each $prefix in $prefixes {
+                $values: append($values, ($prefix, $value));
+            }
+        }
+    }
+    @each $prefix, $value in $values {
+        $prefix: if(is-string($prefix) and str-length($prefix) > 0, '#{$prefix}-', '');
+        $prefixed-values: join((), (), list-separator($value));
+        @each $single-value in $value {
+            $prefixed-values: append($prefixed-values, #{$prefix}#{$single-value});
+        }
+        #{$property}: $prefixed-values;
+    }
+}

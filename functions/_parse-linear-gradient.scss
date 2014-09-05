@@ -1,0 +1,89 @@
+@import "base-functions";
+@import "parse-color-stop";
+
+@function __parse-linear-gradient($linear-gradient...) {
+    $linear-gradient: unwrap-list($linear-gradient);
+    @if length($linear-gradient) == 0 {
+        // <EMPTY-LIST>
+        @return null;
+    }
+    @if is-space-separated($linear-gradient) {
+        $linear-gradient: ($linear-gradient,);
+    }
+    $arg1: nth($linear-gradient, 1);
+    $length_arg1: length($arg1);
+    @if is-comma-separated($arg1) {
+        // <COMMA-LIST> , ...
+        @return null;
+    }
+    @if $length_arg1 == 0 {
+        // <EMPTY-SPACE-LIST> , ...
+        @return null;
+    }
+    $angle: null;
+    $color-stops: ();
+    $color-stop: __parse-color-stop($arg1);
+    @if $color-stop {
+        // <color-stop> , ...
+        $angle: 180deg; // to bottom
+        $color-stops: append($color-stops, $color-stop, comma);
+    } @else {
+        @if length($linear-gradient) < 2 {
+            // Incorrect arguments count
+            @return null;
+        }
+        @if is-angle($arg1) {
+            // <angle> , ...
+            $angle: $arg1;
+        } @else if nth($arg1, 1) == to {
+            // to ... , ...
+            @if $length_arg1 == 1 {
+                // to , ...
+                @return null;
+            }
+            $side-or-corner: slice-list($arg1, 2, $length_arg1);
+            @if not is-side-or-corner($side-or-corner) {
+                // to <UNEXPECTED-VALUE> , ...
+                @return null;
+            }
+            // to <side-or-corner> , ...
+            $angle: map-get((
+                'top': 0deg,
+                'top right': 45deg,
+                'right top': 45deg,
+                'right': 90deg,
+                'right bottom': 135deg,
+                'bottom right': 135deg,
+                'bottom': 180deg,
+                'bottom left': 225deg,
+                'left bottom': 225deg,
+                'left': 270deg,
+                'left top': 315deg,
+                'top left': 315deg
+            ), inspect($side-or-corner));
+        } @else {
+            // <UNEXPECTED-VALUE> , ...
+            @return null;
+        }
+    }
+    @if length($linear-gradient) >= 2 {
+        @each $color-stop in slice-list($linear-gradient, 2) {
+            $color-stop: __parse-color-stop($color-stop);
+            @if not $color-stop {
+                // Incorrect color-stop
+                @return null;
+            }
+            $color-stops: append($color-stops, $color-stop, comma);
+        }
+    }
+    @if length($color-stops) == 1 {
+        $color-stops: append($color-stops, (
+            'color': transparent,
+            'position': null
+        ), comma);
+    }
+    @return (
+        'angle': $angle,
+        'color-stops': $color-stops
+    );
+}

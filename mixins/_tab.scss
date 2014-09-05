@@ -1,0 +1,13 @@
+@import "base-mixins";
+
+// Initial: 8
+//
+// Syntax: <integer> | <length>
+//
+@mixin tab-size($value) {
+    @include prefixed-property(tab-size, $value, (
+        -moz,
+        -o,
+        '',
+    ));
+}

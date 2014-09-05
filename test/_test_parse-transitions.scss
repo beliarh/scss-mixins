@@ -1,0 +1,41 @@
+@import "../functions/parse-transitions";
+
+@debug __parse-transitions() == null;
+@debug __parse-transitions(left) == (
+    (
+        'property': left,
+        'duration': 0s,
+        'function': ease,
+        'delay': 0s,
+    ),
+);
+@debug __parse-transitions(left 1s) == (
+    (
+        'property': left,
+        'duration': 1s,
+        'function': ease,
+        'delay': 0s,
+    ),
+);
+@debug __parse-transitions((left 1s,)) == (
+    (
+        'property': left,
+        'duration': 1s,
+        'function': ease,
+        'delay': 0s,
+    ),
+);
+@debug __parse-transitions(left 1s, top 2s) == (
+    (
+        'property': left,
+        'duration': 1s,
+        'function': ease,
+        'delay': 0s,
+    ),
+    (
+        'property': top,
+        'duration': 2s,
+        'function': ease,
+        'delay': 0s,
+    )
+);

@@ -1,0 +1,94 @@
+@import "base-mixins";
+
+// Initial: none 100% 1 0 stretch
+//
+// Syntax: <border-image-source>
+//         ||
+//         <border-image-slice> [/ <border-image-width> | / <border-image-width>? / <border-image-outset> ]?
+//         ||
+//         <border-image-repeat>
+//
+//         where
+//
+//         <border-image-source> = none | <image>
+//         <border-image-slice>  = [<number> | <percentage>]{1, 4} && fill?
+//         <border-image-width>  = [<number> | <percentage> | <length> | auto]{1, 4}
+//         <border-image-outset> = [<number> | <length>]{1, 4}
+//         <border-image-repeat> = [stretch | repeat | round | space]{1, 2}
+//
+@mixin border-image($value) {
+    @include prefixed-property(border-image, $value, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: [<length> | <percentage>]{1, 4} [/ [<length> | <percentage>]{1, 4}]?
+//
+@mixin border-radius($value) {
+    @include prefixed-property(border-radius, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: [<length> | <percentage>]{1, 2}
+//
+@mixin border-top-left-radius($value) {
+    @include prefixed-property(border-radius-topleft, $value, (
+        -moz,
+    ));
+    @include prefixed-property(border-top-left-radius, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: [<length> | <percentage>]{1, 2}
+//
+@mixin border-top-right-radius($value) {
+    @include prefixed-property(border-radius-topright, $value, (
+        -moz,
+    ));
+    @include prefixed-property(border-top-right-radius, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: [<length> | <percentage>]{1, 2}
+//
+@mixin border-bottom-right-radius($value) {
+    @include prefixed-property(border-radius-bottomright, $value, (
+        -moz,
+    ));
+    @include prefixed-property(border-bottom-right-radius, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: [<length> | <percentage>]{1, 2}
+//
+@mixin border-bottom-left-radius($value) {
+    @include prefixed-property(border-radius-bottomleft, $value, (
+        -moz,
+    ));
+    @include prefixed-property(border-bottom-left-radius, $value, (
+        -webkit,
+        '',
+    ));
+}

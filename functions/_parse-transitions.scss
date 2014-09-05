@@ -1,0 +1,23 @@
+@import "base-functions";
+@import "parse-transition";
+
+@function __parse-transitions($transitions...) {
+    $transitions: unwrap-list($transitions, true);
+    @if length($transitions) == 0 {
+        // <EMPTY-LIST>
+        @return null;
+    }
+    @if is-space-separated($transitions) {
+        $transitions: ($transitions,);
+    }
+    $parsed-transitions: ();
+    @each $transition in $transitions {
+        $parsed-transition: __parse-transition($transition);
+        @if not $parsed-transition {
+            // Incorrect transition
+            @return null;
+        }
+        $parsed-transitions: append($parsed-transitions, $parsed-transition, comma);
+    }
+    @return $parsed-transitions;
+}

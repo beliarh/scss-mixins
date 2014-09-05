@@ -1,0 +1,119 @@
+@import "../functions/base-functions";
+@import "../functions/parse-linear-gradients";
+@import "../functions/parse-radial-gradients";
+@import "../functions/helpers";
+@import "base-mixins";
+
+// Syntax: [[<angle> | to <side-or-corner>],]? <color-stop>#
+//
+//         where
+//
+//         <side-or-corner> = [left | right] || [top | bottom]
+//         <color-stop>     = <color> [<percentage> | <length>]?
+//
+@mixin linear-gradient($linear-gradients...) {
+    $repeating: map-get(keywords($linear-gradients), repeating);
+    $function: if($repeating, repeating-linear-gradient, linear-gradient);
+    $linear-gradients: unwrap-list($linear-gradients);
+    $parsed-linear-gradients: __parse-linear-gradients($linear-gradients);
+    @if not $parsed-linear-gradients {
+        @warn 'Incorrect linear-gradients list: #{inspect($linear-gradients)}.';
+    } @else {
+        $gradients: ();
+        $rotated-gradients: ();
+        $webkit-gradients: ();
+        @each $parsed-linear-gradient in $parsed-linear-gradients {
+            $angle: map-get($parsed-linear-gradient, 'angle');
+            $parsed-color-stops: map-get($parsed-linear-gradient, 'color-stops');
+            $color-stops: __parsed-color-stops-to-list($parsed-color-stops);
+            $gradient: '#{$function}(#{$angle}, #{$color-stops})';
+            $gradients: append($gradients, $gradient);
+            $rotated-gradient: '#{$function}(#{90deg - $angle}, #{$color-stops})';
+            $rotated-gradients: append($rotated-gradients, $rotated-gradient);
+            $webkit-color-stops: __parsed-color-stops-to-webkit-color-stops($parsed-color-stops);
+            @if $webkit-color-stops {
+                $direction: __angle-to-webkit-gradient-direction($angle);
+                $webkit-gradient: 'gradient(linear, #{$direction}, #{$webkit-color-stops})';
+                $webkit-gradients: append($webkit-gradients, $webkit-gradient);
+            }
+        }
+        @if length($webkit-gradients) > 0 {
+            @include prefixed-value(background-image, (
+                -webkit: $webkit-gradients
+            ));
+        }
+        @include prefixed-value(background-image, (
+            -webkit: $rotated-gradients,
+            -moz: $rotated-gradients,
+            -ms: $gradients,
+            -o: $rotated-gradients,
+            '': $gradients
+        ));
+    }
+}
+
+// Syntax: [
+//           [circle             || <length>]                     [at <position>]?,
+//           |
+//           [ellipse            || [<length> | <percentage>]{2, 2}] [at <position>]?,
+//           |
+//           [[circle | ellipse] || <extent-keyword>]             [at <position>]?,
+//           |
+//           at <position>,
+//         ]?
+//         <color-stop>#
+//
+//         where
+//
+//         <extent-keyword> = closest-corner | closest-side | farthest-corner | farthest-side
+//         <position>       = [[<percentage> | <length> | left | center | right]
+//                             [<percentage> | <length> | top | center | bottom]?]
+//                             |
+//                             [[left | center | right] || [top | center | bottom]]
+//         <color-stop>     = <color> [<percentage> | <length>]?
+//
+@mixin radial-gradient($radial-gradients...) {
+    $repeating: map-get(keywords($radial-gradients), repeating);
+    $function: if($repeating, repeating-radial-gradient, radial-gradient);
+    $radial-gradients: unwrap-list($radial-gradients);
+    $parsed-radial-gradients: __parse-radial-gradients($radial-gradients);
+    @if not $parsed-radial-gradients {
+        @warn 'Incorrect gradients list: #{inspect($radial-gradients)}.';
+    } @else {
+        $gradients: ();
+        $moz-gradients: ();
+        @each $parsed-radial-gradient in $parsed-radial-gradients {
+            $shape: map-get($parsed-radial-gradient, 'shape');
+            $size: map-get($parsed-radial-gradient, 'size');
+            $parsed-position: map-get($parsed-radial-gradient, 'position');
+            $position: map-get($parsed-position, 'x') map-get($parsed-position, 'y');
+            $parsed-color-stops: map-get($parsed-radial-gradient, 'color-stops');
+            $color-stops: __parsed-color-stops-to-list($parsed-color-stops);
+            $gradient: '#{$function}(#{$shape} #{$size} at #{$position}, #{$color-stops})';
+            @if is-extent-keyword($size) {
+                $moz-size: null;
+                @if $size == closest-side {
+                    $moz-size: contain;
+                } @else if $size == farthest-corner {
+                    $moz-size: cover;
+                } @else {
+                    $moz-size: $size;
+                }
+                $moz-gradient: '#{$function}(#{$position}, #{$shape} #{$moz-size}, #{$color-stops})';
+                $moz-gradients: append($moz-gradients, $moz-gradient);
+            }
+            $gradients: append($gradients, $gradient);
+        }
+        @if length($moz-gradients) > 0 {
+            @include prefixed-value(background-image, (
+                -moz: $moz-gradients
+            ));
+        }
+        @include prefixed-value(background-image, (
+            -webkit: $gradients,
+            -ms: $gradients,
+            -o: $gradients,
+            '': $gradients,
+        ));
+    }
+}

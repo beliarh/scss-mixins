@@ -1,0 +1,123 @@
+@import "base-mixins";
+
+// Initial: balance
+//
+// Syntax: auto | balance
+//
+@mixin column-fill($value) {
+    @include prefixed-property(column-fill, $value, (
+        -moz,
+        '',
+    ));
+}
+
+// Initial: normal
+//
+// Syntax: <length> | normal
+//
+@mixin column-gap($value) {
+    @include prefixed-property(column-gap, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: 0 none currentColor
+//
+// Syntax: <column-rule-width>
+//         ||
+//         <column-rule-style>
+//         ||
+//         [<column-rule-color> | transparent]
+//
+@mixin column-rule($value) {
+    @include prefixed-property(column-rule, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: 0
+//
+// Syntax: thin | medium | thick | <length>
+//
+@mixin column-rule-width($value) {
+    @include prefixed-property(column-rule-width, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: none
+//
+// Syntax: none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+//
+@mixin column-rule-style($value) {
+    @include prefixed-property(column-rule-style, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: currentColor
+//
+// Syntax: <color>
+//
+@mixin column-rule-color($value) {
+    @include prefixed-property(column-rule-color, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: none
+//
+// Syntax: none | all
+//
+@mixin column-span($value) {
+    @include prefixed-property(column-span, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: auto auto
+//
+// Syntax: <column-width> || <column-count>
+//
+@mixin columns($value) {
+    @include prefixed-property(columns, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: auto
+//
+// Syntax: <length> | auto
+//
+@mixin column-width($value) {
+    @include prefixed-property(column-width, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: auto
+//
+// Syntax: <integer> | auto
+//
+@mixin column-count($value) {
+    @include prefixed-property(column-count, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}

@@ -1,0 +1,58 @@
+@mixin triangle($width, $height, $color, $direction: top) {
+    $top-width: 0;
+    $top-color: rgba(0, 0, 0, 0);
+    $right-width: 0;
+    $right-color: rgba(0, 0, 0, 0);
+    $bottom-width: 0;
+    $bottom-color: rgba(0, 0, 0, 0);
+    $left-width: 0;
+    $left-color: rgba(0, 0, 0, 0);
+    $valid-direction: true;
+    @if $direction == top {
+        $left-width: $width / 2;
+        $right-width: $width / 2;
+        $bottom-width: $height;
+        $bottom-color: $color;
+    } @else if $direction == (top right) or $direction == (right top) {
+        $right-width: $width;
+        $right-color: $color;
+        $bottom-width: $height;
+    } @else if $direction == right {
+        $top-width: $height / 2;
+        $bottom-width: $height / 2;
+        $left-width: $width;
+        $left-color: $color;
+    } @else if $direction == (bottom right) or $direction == (right bottom) {
+        $left-width: $width;
+        $bottom-width: $height;
+        $bottom-color: $color;
+    } @else if $direction == bottom {
+        $top-width: $height;
+        $top-color: $color;
+        $left-width: $width / 2;
+        $right-width: $width / 2;
+    } @else if $direction == (bottom left) or $direction == (left bottom) {
+        $top-width: $height;
+        $left-width: $width;
+        $left-color: $color;
+    } @else if $direction == left {
+        $top-width: $height / 2;
+        $bottom-width: $height / 2;
+        $right-width: $width;
+        $right-color: $color;
+    } @else if $direction == (top left) or $direction == (left top) {
+        $top-width: $height;
+        $top-color: $color;
+        $right-width: $width;
+    } @else {
+        @warn 'Incorrect triangle direction: #{inspect($direction)}';
+        $valid-direction: false;
+    }
+    @if $valid-direction {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: $top-width $right-width $bottom-width $left-width;
+        border-color: $top-color $right-color $bottom-color $left-color;
+    }
+}

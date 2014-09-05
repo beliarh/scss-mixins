@@ -1,0 +1,120 @@
+@import "base-mixins";
+
+// Initial: none
+//
+// Syntax: none | [<filter-function> | <url>]+
+//
+//         where
+//
+//         <filter-function> = <blur()>
+//                             |
+//                             <brightness()>
+//                             |
+//                             <contrast()>
+//                             |
+//                             <drop-shadow()>
+//                             |
+//                             <grayscale()>
+//                             |
+//                             <hue-rotate()>
+//                             |
+//                             <invert()>
+//                             |
+//                             <opacity()>
+//                             |
+//                             <saturate()>
+//                             |
+//                             <sepia()>
+//
+@mixin filter($filters...) {
+    @include prefixed-property(filter, $filters, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: 0px
+//
+// Syntax: <length>
+//
+@mixin filter-blur($value) {
+    @include filter(unquote('blur(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-brightness($value) {
+    @include filter(unquote('brightness(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-contrast($value) {
+    @include filter(unquote('contrast(#{$value})'));
+}
+
+// Initial: 0px 0px 0px transparent
+//
+// Syntax: <x-offset> <y-offset> <blur-radius>? <color>
+//
+//         where
+//
+//         <x-offset>    = <length>
+//         <y-offset>    = <length>
+//         <blur-radius> = <length>
+//
+@mixin filter-drop-shadow($x, $y, $blur, $color) {
+    @include filter(unquote('drop-shadow(#{$x} #{$y} #{$blur} #{$color})'));
+}
+
+// Initial: 0
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-grayscale($value) {
+    @include filter(unquote('grayscale(#{$value})'));
+}
+
+// Initial: 0deg
+//
+// Syntax: <angle>
+//
+@mixin filter-hue-rotate($value) {
+    @include filter(unquote('hue-rotate(#{$value})'));
+}
+
+// Initial: 0
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-invert($value) {
+    @include filter(unquote('invert(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-opacity($value) {
+    @include filter(unquote('opacity(#{$value})'));
+}
+
+// Initial: 1
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-saturate($value) {
+    @include filter(unquote('saturate(#{$value})'));
+}
+
+// Initial: 0
+//
+// Syntax: <number> | <percentage>
+//
+@mixin filter-sepia($value) {
+    @include filter(unquote('sepia(#{$value})'));
+}

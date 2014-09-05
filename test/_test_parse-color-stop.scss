@@ -1,0 +1,16 @@
+@import "../functions/parse-color-stop";
+
+@debug __parse-color-stop(())         == null;
+@debug __parse-color-stop((#fff,))    == null;
+@debug __parse-color-stop((#fff, 0%)) == null;
+@debug __parse-color-stop(#fff 0% 0%) == null;
+@debug __parse-color-stop(#fff)       == (color: #fff, position: null);
+@debug __parse-color-stop(#fff 0%)    == (color: #fff, position: 0%);
+@debug __parse-color-stop(#fff 0px)   == (color: #fff, position: 0px);
+@debug __parse-color-stop(#fff 0)     == (color: #fff, position: 0px);
+@debug __parse-color-stop(0%)         == null;
+@debug __parse-color-stop(0px)        == null;
+@debug __parse-color-stop(0)          == null;
+@debug __parse-color-stop(0% #fff)    == null;
+@debug __parse-color-stop(0px #fff)   == null;
+@debug __parse-color-stop(0 #fff)     == null;

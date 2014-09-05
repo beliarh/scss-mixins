@@ -1,0 +1,56 @@
+@import "../functions/parse-linear-gradients";
+
+@debug __parse-linear-gradients() == null;
+@debug __parse-linear-gradients(#fff) == (
+    (
+        'angle': 180deg,
+        'color-stops': (
+            ('color': #fff, 'position': null),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-linear-gradients(#fff 0%) == (
+    (
+        'angle': 180deg,
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-linear-gradients((#fff 0%,)) == (
+    (
+        'angle': 180deg,
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': transparent, 'position': null)
+        )
+    ),
+);
+@debug __parse-linear-gradients(#fff 0%, #000 100%) == (
+    (
+        'angle': 180deg,
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': #000, 'position': 100%)
+        )
+    ),
+);
+@debug __parse-linear-gradients((#fff 0%, #000 100%), (0deg, red 25%, green 75%)) == (
+    (
+        'angle': 180deg,
+        'color-stops': (
+            ('color': #fff, 'position': 0%),
+            ('color': #000, 'position': 100%)
+        )
+    ),
+    (
+        'angle': 0deg,
+        'color-stops': (
+            ('color': red, 'position': 25%),
+            ('color': green, 'position': 75%)
+        )
+    ),
+);
+@debug __parse-linear-gradients((#fff 0%, #000 100%), (UNEXPECTEDVALUE,)) == null;

@@ -1,0 +1,22 @@
+// TODO: replace "@if $root { ... }" by "@if & { ... }".
+@mixin fullscreen($root: false) {
+    $pseudo-classes: (
+        ':-webkit-full-screen',
+        ':-moz-full-screen',
+        ':-ms-fullscreen',
+        ':fullscreen',
+    );
+    @each $pseudo-class in $pseudo-classes {
+        @at-root {
+            @if $root {
+                #{$pseudo-class} {
+                    @content;
+                }
+            } @else {
+                #{$pseudo-class} & {
+                    @content;
+                }
+            }
+        }
+    }
+}

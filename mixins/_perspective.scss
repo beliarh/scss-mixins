@@ -1,0 +1,32 @@
+@import "base-mixins";
+
+// Initial: none
+//
+// Syntax: none | <length>
+//
+@mixin perspective($value) {
+    @include prefixed-property(perspective, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: 50% 50%
+//
+// Syntax: <position>
+//
+//         where
+//
+//         <position> = [[<percentage> | <length> | left | center | right]
+//                       [<percentage> | <length> | top | center | bottom]?]
+//                       |
+//                       [[left | center | right] || [top | center | bottom]]
+//
+@mixin perspective-origin($value) {
+    @include prefixed-property(perspective-origin, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}

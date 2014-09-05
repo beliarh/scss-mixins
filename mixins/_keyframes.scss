@@ -1,0 +1,25 @@
+// Syntax: @keyframes <identifier> {
+//             [from | to | <percentage>]# {
+//                 declaration? [; declaration?]*
+//             }
+//         }
+//
+@mixin keyframes($identifier) {
+    @at-root {
+        @-webkit-keyframes #{$identifier} {
+            @content;
+        }
+
+        @-moz-keyframes #{$identifier} {
+            @content;
+        }
+
+        @-o-keyframes #{$identifier} {
+            @content;
+        }
+
+        @keyframes #{$identifier} {
+            @content;
+        }
+    }
+}

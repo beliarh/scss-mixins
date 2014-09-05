@@ -1,0 +1,56 @@
+@import "base-functions";
+
+// Based on Compass transition-map function
+// https://github.com/Compass/compass/blob/stable/core/stylesheets/compass/css3/_transition.scss#L60-L78
+@function __parse-transition($transition) {
+    $property: null;
+    $duration: null;
+    $function: null;
+    $delay: null;
+    @if is-comma-separated($transition) {
+        // <COMMA-LIST>
+        @return null;
+    }
+    $length: length($transition);
+    @if not ($length >= 1 and $length <= 4) {
+        // Incorrect arguments count
+        @return null;
+    }
+    @each $item in $transition {
+        @if is-time($item) {
+            @if $duration == null {
+                $duration: $item;
+            } @else {
+                @if $delay == null {
+                    $delay: $item;
+                } @else {
+                    // Third <time>
+                    @return null;
+                }
+            }
+        } @else if is-timing-function($item) {
+            @if $function == null {
+                $function: $item;
+            } @else {
+                // Second <timing-function>
+                @return null;
+            }
+        } @else if is-string($item) {
+            @if $property == null {
+                $property: $item;
+            } @else {
+                // Second <property>
+                @return null;
+            }
+        } @else {
+            // Unexpected value
+            @return null;
+        }
+    }
+    @return (
+        'property': $property or all,
+        'duration': $duration or 0s,
+        'function': $function or ease,
+        'delay': $delay or 0s,
+    );
+}

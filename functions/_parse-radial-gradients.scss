@@ -1,0 +1,23 @@
+@import "base-functions";
+@import "parse-radial-gradient";
+
+@function __parse-radial-gradients($radial-gradients...) {
+    $radial-gradients: unwrap-list($radial-gradients, true);
+    @if length($radial-gradients) == 0 {
+        // <EMPTY-LIST>
+        @return null;
+    }
+    @if is-space-separated(nth($radial-gradients, 1)) {
+        $radial-gradients: ($radial-gradients,);
+    }
+    $parsed-radial-gradients: ();
+    @each $radial-gradient in $radial-gradients {
+        $parsed-radial-gradient: __parse-radial-gradient($radial-gradient);
+        @if not $parsed-radial-gradient {
+            // Incorrect radial-gradient
+            @return null;
+        }
+        $parsed-radial-gradients: append($parsed-radial-gradients, $parsed-radial-gradient, comma);
+    }
+    @return $parsed-radial-gradients;
+}

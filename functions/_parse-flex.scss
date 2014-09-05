@@ -1,0 +1,110 @@
+@import "base-functions";
+
+@function __parse-flex($flex) {
+    @if is-comma-separated($flex) {
+        // <COMMA-LIST>
+        @return null;
+    }
+    $length: length($flex);
+    @if not ($length >= 1 and $length <= 3) {
+        // Incorrect arguments count.
+        @return null;
+    }
+    $arg1: nth($flex, 1);
+    @if $arg1 == none {
+        // none ...
+        @if $length == 1 {
+            // none
+            @return none;
+        }
+        // none <UNEXPECTED-VALUE>
+        @return null;
+    }
+    @if is-number($arg1) and unitless($arg1) {
+        // <number> ...
+        @if $length == 1 {
+            // <number>
+            @return (
+                'grow': $arg1,
+                'shrink': 1,
+                'basis': auto
+            );
+        }
+        $arg2: nth($flex, 2);
+        @if is-number($arg2) and unitless($arg2) {
+            // <number> <number> ...
+            @if $length == 2 {
+                // <number> <number>
+                @return (
+                    'grow': $arg1,
+                    'shrink': $arg2,
+                    'basis': auto
+                );
+            }
+            $arg3: nth($flex, 3);
+            @if is-width($arg3) {
+                // <number> <number> <width>
+                @return (
+                    'grow': $arg1,
+                    'shrink': $arg2,
+                    'basis': $arg3
+                );
+            }
+            // <number> <number> <UNEXPECTED-VALUE>
+            @return null;
+        }
+        @if is-width($arg2) {
+            // <number> <width> ...
+            @if $length == 2 {
+                // <number> <width>
+                @return (
+                    'grow': $arg1,
+                    'shrink': 1,
+                    'basis': $arg2
+                );
+            }
+            // <number> <width> <UNEXPECTED-VALUE>
+            @return null;
+        }
+        // <number> <UNEXPECTED-VALUE>
+        @return null;
+    }
+    @if is-width($arg1) {
+        // <width> ...
+        @if $length == 1 {
+            // <width>
+            @return (
+                'grow': 0,
+                'shrink': 1,
+                'basis': $arg1
+            );
+        }
+        $arg2: nth($flex, 2);
+        @if is-number($arg2) and unitless($arg2) {
+            // <width> <number> ...
+            @if $length == 2 {
+                // <width> <number>
+                @return (
+                    'grow': $arg2,
+                    'shrink': 1,
+                    'basis': $arg1
+                );
+            }
+            $arg3: nth($flex, 3);
+            @if is-number($arg3) and unitless($arg3) {
+                // <width> <number> <number>
+                @return (
+                    'grow': $arg2,
+                    'shrink': $arg3,
+                    'basis': $arg1
+                );
+            }
+            // <width> <number> <UNEXPECTED-VALUE>
+            @return null;
+        }
+        // <width> <UNEXPECTED-VALUE>
+        @return null;
+    }
+    // <UNEXPECTED-VALUE>
+    @return null;
+}

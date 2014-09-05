@@ -1,0 +1,470 @@
+@import "base-functions";
+@import "parse-background-position";
+@import "parse-color-stop";
+
+@function __parse-radial-gradient($radial-gradient...) {
+    $radial-gradient: unwrap-list($radial-gradient);
+    @if length($radial-gradient) == 0 {
+        // <EMPTY-LIST>
+        @return null;
+    }
+    @if is-space-separated($radial-gradient) {
+        $radial-gradient: ($radial-gradient,);
+    }
+    $arg1: nth($radial-gradient, 1);
+    $length_arg1: length($arg1);
+    @if is-comma-separated($arg1) {
+        // <COMMA-LIST> , ...
+        @return null;
+    }
+    @if $length_arg1 == 0 {
+        // <EMPTY-SPACE-LIST> , ...
+        @return null;
+    }
+    $shape: null;
+    $size: null;
+    $position: null;
+    $color-stops: ();
+    $color-stop: __parse-color-stop($arg1);
+    @if $color-stop {
+        // <color-stop> , ...
+        $shape: ellipse;
+        $size: farthest-corner;
+        $position: ('x': center, 'y': center);
+        $color-stops: append($color-stops, $color-stop, comma);
+    } @else {
+        @if length($radial-gradient) < 2 {
+            // Incorrect arguments count
+            @return null;
+        }
+        $arg1_1: unquote(nth($arg1, 1));
+        @if $arg1_1 == circle {
+            // circle ... , ...
+            @if $length_arg1 == 1 {
+                // circle , ...
+                $shape: $arg1_1;
+                $size: farthest-corner;
+                $position: ('x': center, 'y': center);
+            } @else {
+                $arg1_2: unquote(nth($arg1, 2));
+                @if $arg1_2 == at {
+                    // circle at ... , ...
+                    @if $length_arg1 == 2 {
+                        // circle at , ...
+                        @return null;
+                    }
+                    $position: __parse-background-position(slice-list($arg1, 3, $length_arg1));
+                    @if not $position {
+                        // circle at <UNEXPECTED-VALUE> ... , ...
+                        @return null;
+                    }
+                    // circle at <position> , ...
+                    $shape: $arg1_1;
+                    $size: farthest-corner;
+                    //$position: $position;
+                } @else if is-length($arg1_2) or is-extent-keyword($arg1_2) {
+                    // circle [<length> | <extent-keyword>] ... , ...
+                    @if $length_arg1 == 2 {
+                        // circle [<length> | <extent-keyword>] , ...
+                        $shape: $arg1_1;
+                        $size: $arg1_2;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        @if nth($arg1, 3) != at {
+                            // circle [<length> | <extent-keyword>] <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // circle [<length> | <extent-keyword>] at ... , ...
+                        @if $length_arg1 == 3 {
+                            // circle [<length> | <extent-keyword>] at , ...
+                            @return null;
+                        }
+                        $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                        @if not $position {
+                            // circle [<length> | <extent-keyword>] at <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // circle [<length> | <extent-keyword>] at <position> , ...
+                        $shape: $arg1_1;
+                        $size: $arg1_2;
+                        //$position: $position;
+                    }
+                } @else {
+                    // circle <UNEXPECTED-VALUE> ... , ...
+                    @return null;
+                }
+            }
+        } @else if is-length($arg1_1) {
+            // <length> ... , ...
+            @if $length_arg1 == 1 {
+                // <length> , ...
+                $shape: circle;
+                $size: $arg1_1;
+                $position: ('x': center, 'y': center);
+            } @else {
+                $arg1_2: unquote(nth($arg1, 2));
+                @if $arg1_2 == at {
+                    // <length> at ... , ...
+                    @if $length_arg1 == 2 {
+                        // <length> at , ...
+                        @return null;
+                    }
+                    $position: __parse-background-position(slice-list($arg1, 3, $length_arg1));
+                    @if not $position {
+                        // <length> at <UNEXPECTED-VALUE> ... , ...
+                        @return null;
+                    }
+                    // <length> at <position> , ...
+                    $shape: circle;
+                    $size: $arg1_1;
+                    //$position: $position;
+                } @else if $arg1_2 == circle {
+                    // <length> circle ... , ...
+                    @if $length_arg1 == 2 {
+                        // <length> circle , ...
+                        $shape: $arg1_2;
+                        $size: $arg1_1;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        @if nth($arg1, 3) != at {
+                            // <length> circle <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // <length> circle at ... , ...
+                        @if $length_arg1 == 3 {
+                            // <length> circle at , ...
+                            @return null;
+                        }
+                        $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                        @if not $position {
+                            // <length> circle at <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // <length> circle at <position> , ...
+                        $shape: $arg1_2;
+                        $size: $arg1_1;
+                        //$position: $position;
+                    }
+                } @else if is-length($arg1_2) or is-percentage($arg1_2) {
+                    // <length> [<length> | <percentage>] ... , ...
+                    @if $length_arg1 == 2 {
+                        // <length> [<length> | <percentage>] , ...
+                        $shape: ellipse;
+                        $size: $arg1_1 $arg1_2;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        $arg1_3: unquote(nth($arg1, 3));
+                        @if $arg1_3 == at {
+                            // <length> [<length> | <percentage>] at ... , ...
+                            @if $length_arg1 == 3 {
+                                // <length> [<length> | <percentage>] at , ...
+                                @return null;
+                            }
+                            $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                            @if not $position {
+                                // <length> [<length> | <percentage>] at <UNEXPECTED-VALUE> ... , ...
+                                @return null;
+                            }
+                            // <length> [<length> | <percentage>] at <position> , ...
+                            $shape: ellipse;
+                            $size: $arg1_1 $arg1_2;
+                            //$position: $position;
+                        } @else if $arg1_3 == ellipse {
+                            // <length> [<length> | <percentage>] ellipse ... , ...
+                            @if $length_arg1 == 3 {
+                                // <length> [<length> | <percentage>] ellipse , ...
+                                $shape: $arg1_3;
+                                $size: $arg1_1 $arg1_2;
+                                $position: ('x': center, 'y': center);
+                            } @else {
+                                @if nth($arg1, 4) != at {
+                                    // <length> [<length> | <percentage>] ellipse <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // <length> [<length> | <percentage>] ellipse at ... , ...
+                                @if $length_arg1 == 4 {
+                                    // <length> [<length> | <percentage>] ellipse at , ...
+                                    @return null;
+                                }
+                                $position: __parse-background-position(slice-list($arg1, 5, $length_arg1));
+                                @if not $position {
+                                    // <length> [<length> | <percentage>] ellipse at <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // <length> [<length> | <percentage>] ellipse at <position> , ...
+                                $shape: $arg1_3;
+                                $size: $arg1_1 $arg1_2;
+                                //$position: $position;
+                            }
+                        } @else {
+                            // <length> [<length> | <percentage>] <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                    }
+                } @else {
+                    // <length> <UNEXPECTED-VALUE> ... , ...
+                    @return null;
+                }
+            }
+        } @else if $arg1_1 == ellipse {
+            // ellipse ... , ...
+            @if $length_arg1 == 1 {
+                // ellipse , ...
+                $shape: $arg1_1;
+                $size: farthest-corner;
+                $position: ('x': center, 'y': center);
+            } @else {
+                $arg1_2: unquote(nth($arg1, 2));
+                @if $arg1_2 == at {
+                    // ellipse at ... , ...
+                    @if $length_arg1 == 2 {
+                        // ellipse at , ...
+                        @return null;
+                    }
+                    $position: __parse-background-position(slice-list($arg1, 3, $length_arg1));
+                    @if not $position {
+                        // ellipse at <UNEXPECTED-VALUE> ... , ...
+                        @return null;
+                    }
+                    // ellipse at <position> , ...
+                    $shape: $arg1_1;
+                    $size: farthest-corner;
+                    //$position: $position;
+                } @else if is-length($arg1_2) or is-percentage($arg1_2) {
+                    // ellipse [<length> | <percentage>] ... , ...
+                    @if $length_arg1 >= 3 {
+                        $arg1_3: unquote(nth($arg1, 3));
+                        @if is-length($arg1_3) or is-percentage($arg1_3) {
+                            // ellipse [<length> | <percentage>] [<length> | <percentage>] ... , ...
+                            @if $length_arg1 == 3 {
+                                // ellipse [<length> | <percentage>] [<length> | <percentage>] , ...
+                                $shape: $arg1_1;
+                                $size: $arg1_2 $arg1_3;
+                                $position: ('x': center, 'y': center);
+                            } @else {
+                                @if nth($arg1, 4) != at {
+                                    // ellipse [<length> | <percentage>] [<length> | <percentage>] <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // ellipse [<length> | <percentage>] [<length> | <percentage>] at ... , ...
+                                @if $length_arg1 == 4 {
+                                    // ellipse [<length> | <percentage>] [<length> | <percentage>] at , ...
+                                    @return null;
+                                }
+                                $position: __parse-background-position(slice-list($arg1, 5, $length_arg1));
+                                @if not $position {
+                                    // ellipse [<length> | <percentage>] [<length> | <percentage>] at <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // ellipse [<length> | <percentage>] [<length> | <percentage>] at <position> , ...
+                                $shape: $arg1_1;
+                                $size: $arg1_2 $arg1_3;
+                                //$position: $position;
+                            }
+                        } @else {
+                            // ellipse [<length> | <percentage>] <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                    } @else {
+                        // ellipse [<length> | <percentage>] , ...
+                        @return null;
+                    }
+                } @else if is-extent-keyword($arg1_2) {
+                    // ellipse <extent-keyword> ... , ...
+                    @if $length_arg1 == 2 {
+                        // ellipse <extent-keyword> , ...
+                        $shape: $arg1_1;
+                        $size: $arg1_2;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        @if nth($arg1, 3) != at {
+                            // ellipse <extent-keyword> <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // ellipse <extent-keyword> at ... , ...
+                        @if $length_arg1 == 3 {
+                            // ellipse <extent-keyword> at , ...
+                            @return null;
+                        }
+                        $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                        @if not $position {
+                            // ellipse <extent-keyword> at <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // ellipse <extent-keyword> at <position> , ...
+                        $shape: $arg1_1;
+                        $size: $arg1_2;
+                        //$position: $position;
+                    }
+                } @else {
+                    // ellipse <UNEXPECTED-VALUE> ... , ...
+                    @return null;
+                }
+            }
+        } @else if is-percentage($arg1_1) {
+            // <percentage> ... , ...
+            @if $length_arg1 >= 2 {
+                $arg1_2: unquote(nth($arg1, 2));
+                @if is-length($arg1_2) or is-percentage($arg1_2) {
+                    // <percentage> [<length> | <percentage>] ... , ...
+                    @if $length_arg1 == 2 {
+                        // <percentage> [<length> | <percentage>] , ...
+                        $shape: ellipse;
+                        $size: $arg1_1 $arg1_2;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        $arg1_3: unquote(nth($arg1, 3));
+                        @if $arg1_3 == at {
+                            // <percentage> [<length> | <percentage>] at ... , ...
+                            @if $length_arg1 == 3 {
+                                // <percentage> [<length> | <percentage>] at , ...
+                                @return null;
+                            }
+                            $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                            @if not $position {
+                                // <percentage> [<length> | <percentage>] at <UNEXPECTED-VALUE> ... , ...
+                                @return null;
+                            }
+                            // <percentage> [<length> | <percentage>] at <position> , ...
+                            $shape: ellipse;
+                            $size: $arg1_1 $arg1_2;
+                            //$position: $position;
+                        } @else if $arg1_3 == ellipse {
+                            // <percentage> [<length> | <percentage>] ellipse ... , ...
+                            @if $length_arg1 == 3 {
+                                // <percentage> [<length> | <percentage>] ellipse , ...
+                                $shape: $arg1_3;
+                                $size: $arg1_1 $arg1_2;
+                                $position: ('x': center, 'y': center);
+                            } @else {
+                                @if nth($arg1, 4) != at {
+                                    // <percentage> [<length> | <percentage>] ellipse <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // <percentage> [<length> | <percentage>] ellipse at ... , ...
+                                @if $length_arg1 == 4 {
+                                    // <percentage> [<length> | <percentage>] ellipse at , ...
+                                    @return null;
+                                }
+                                $position: __parse-background-position(slice-list($arg1, 5, $length_arg1));
+                                @if not $position {
+                                    // <percentage> [<length> | <percentage> ellipse at <UNEXPECTED-VALUE> ... , ...
+                                    @return null;
+                                }
+                                // <percentage> [<length> | <percentage>] ellipse at <position> , ...
+                                $shape: $arg1_3;
+                                $size: $arg1_1 $arg1_2;
+                                //$position: $position;
+                            }
+                        } @else {
+                            // <percentage> [<length> | <percentage>] <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                    }
+                } @else {
+                    // <percentage> <UNEXPECTED-VALUE> ... , ...
+                    @return null;
+                }
+            } @else {
+                // <percentage> , ...
+                @return null;
+            }
+        } @else if is-extent-keyword($arg1_1) {
+            // <extent-keyword> ... , ...
+            @if $length_arg1 == 1 {
+                // <extent-keyword> , ...
+                $shape: ellipse;
+                $size: $arg1_1;
+                $position: ('x': center, 'y': center);
+            } @else {
+                $arg1_2: unquote(nth($arg1, 2));
+                @if $arg1_2 == at {
+                    // <extent-keyword> at ... , ...
+                    @if $length_arg1 == 2 {
+                        // <extent-keyword> at , ...
+                        @return null;
+                    }
+                    $position: __parse-background-position(slice-list($arg1, 3, $length_arg1));
+                    @if not $position {
+                        // <extent-keyword> at <UNEXPECTED-VALUE> ... , ...
+                        @return null;
+                    }
+                    // <extent-keyword> at <position> , ...
+                    $shape: ellipse;
+                    $size: $arg1_1;
+                    //$position: $position;
+                } @else if $arg1_2 == circle or $arg1_2 == ellipse {
+                    // <extent-keyword> [circle | ellipse] ... , ...
+                    @if $length_arg1 == 2 {
+                        // <extent-keyword> [circle | ellipse] , ...
+                        $shape: $arg1_2;
+                        $size: $arg1_1;
+                        $position: ('x': center, 'y': center);
+                    } @else {
+                        @if nth($arg1, 3) != at {
+                            // <extent-keyword> [circle | ellipse] <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // <extent-keyword> [circle | ellipse] at ... , ...
+                        @if $length_arg1 == 3 {
+                            // <extent-keyword> [circle | ellipse] at , ...
+                            @return null;
+                        }
+                        $position: __parse-background-position(slice-list($arg1, 4, $length_arg1));
+                        @if not $position {
+                            // <extent-keyword> [circle | ellipse] at <UNEXPECTED-VALUE> ... , ...
+                            @return null;
+                        }
+                        // <extent-keyword> [circle | ellipse] at <position> , ...
+                        $shape: $arg1_2;
+                        $size: $arg1_1;
+                        //$position: $position;
+                    }
+                } @else {
+                    // <extent-keyword> <UNEXPECTED-VALUE> ... , ...
+                    @return null;
+                }
+            }
+        } @else if $arg1_1 == at {
+            // at ... , ...
+            @if $length_arg1 == 1 {
+                // at , ...
+                @return null;
+            }
+            $position: __parse-background-position(slice-list($arg1, 2, $length_arg1));
+            @if not $position {
+                // at <UNEXPECTED-VALUE> ... , ...
+                @return null;
+            }
+            // at <position> , ...
+            $shape: ellipse;
+            $size: farthest-corner;
+            //$position: $position;
+        } @else {
+            // <UNEXPECTED-VALUE> ... , ...
+            @return null;
+        }
+    }
+    @if length($radial-gradient) >=2 {
+        @each $color-stop in slice-list($radial-gradient, 2) {
+            $color-stop: __parse-color-stop($color-stop);
+            @if not $color-stop {
+                // Incorrect color-stop
+                @return null;
+            }
+            $color-stops: append($color-stops, $color-stop, comma);
+        }
+    }
+    @if length($color-stops) == 1 {
+        $color-stops: append($color-stops, (
+            'color': transparent,
+            'position': null
+        ), comma);
+    }
+    @return (
+        'shape': $shape,
+        'size': $size,
+        'position': $position,
+        'color-stops': $color-stops
+    );
+}

@@ -1,0 +1,20 @@
+// TODO: replace "@if $root { ... }" by "@if & { ... }".
+@mixin selection($root: false) {
+    @if $root {
+        ::-moz-selection {
+            @content;
+        }
+
+        ::selection {
+            @content;
+        }
+    } @else {
+        &::-moz-selection {
+            @content;
+        }
+
+        &::selection {
+            @content;
+        }
+    }
+}

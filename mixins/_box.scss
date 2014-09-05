@@ -1,0 +1,36 @@
+@import "base-mixins";
+
+// Initial: none
+//
+// Syntax: none | <shadow>#
+//
+//         where
+//
+//         <shadow> = inset? && [<x-offset> <y-offset> <blur-radius>? <spread-radius>? <color>?]
+//
+//                    where
+//
+//                    <x-offset>      = <length>
+//                    <y-offset>      = <length>
+//                    <blur-radius>   = <length>
+//                    <spread-radius> = <length>
+//
+@mixin box-shadow($shadows...) {
+    @include prefixed-property(box-shadow, $shadows, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}
+
+// Initial: content-box
+//
+// Syntax: content-box | padding-box | border-box
+//
+@mixin box-sizing($value) {
+    @include prefixed-property(box-sizing, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}

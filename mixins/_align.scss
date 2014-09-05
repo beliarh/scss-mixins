@@ -1,0 +1,34 @@
+@import "base-mixins";
+
+// Initial: stretch
+//
+// Syntax: flex-start | flex-end | center | space-between | space-around | stretch
+//
+@mixin align-content($value) {
+    @include prefixed-property(align-content, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: stretch
+//
+// Syntax: flex-start | flex-end | center | baseline | stretch
+//
+@mixin align-items($value) {
+    @include prefixed-property(align-items, $value, (
+        -webkit,
+        '',
+    ));
+}
+
+// Initial: auto
+//
+// Syntax: auto | flex-start | flex-end | center | baseline | stretch
+//
+@mixin align-self($value) {
+    @include prefixed-property(align-self, $value, (
+        -webkit,
+        '',
+    ));
+}

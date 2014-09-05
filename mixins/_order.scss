@@ -1,0 +1,19 @@
+@import "base-mixins";
+
+// Initial: 0
+//
+// Syntax: <integer>
+//
+@mixin order($value) {
+    @include prefixed-property(box-ordinal-group, $value, (
+        -webkit,
+        -moz,
+    ));
+    @include prefixed-property(flex-order, $value, (
+        -ms,
+    ));
+    @include prefixed-property(order, $value, (
+        -webkit,
+        '',
+    ));
+}

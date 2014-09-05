@@ -1,0 +1,13 @@
+@import "base-mixins";
+
+// Initial: visible
+//
+// Syntax: visible | hidden
+//
+@mixin backface-visibility($value) {
+    @include prefixed-property(backface-visibility, $value, (
+        -webkit,
+        -moz,
+        '',
+    ));
+}

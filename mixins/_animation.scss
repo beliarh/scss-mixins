@@ -1,0 +1,172 @@
+@import "base-mixins";
+
+// Initial: none 0s ease 0s 1 normal none running
+//
+// Syntax: <single-animation>#
+//
+//         where
+//
+//         <single-animation> = <single-animation-name>
+//                              ||
+//                              <single-animation-duration>
+//                              ||
+//                              <single-animation-timing-function>
+//                              ||
+//                              <single-animation-delay>
+//                              ||
+//                              <single-animation-iteration-count>
+//                              ||
+//                              <single-animation-direction>
+//                              ||
+//                              <single-animation-fill-mode>
+//                              ||
+//                              <single-animation-play-state>
+//
+@mixin animation($animations...) {
+    @include prefixed-property(animation, $animations, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: none
+//
+// Syntax: <single-animation-name>#
+//
+//         where
+//
+//         <single-animation-name> = none | <IDENT>
+//
+@mixin animation-name($names...) {
+    @include prefixed-property(animation-name, $names, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 0s
+//
+// Syntax: <time>#
+//
+@mixin animation-duration($durations...) {
+    @include prefixed-property(animation-duration, $durations, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: ease
+//
+// Syntax: <single-timing-function>#
+//
+//         where
+//
+//         <single-timing-function> = ease | linear | ease-in | ease-out | ease-in-out | step-start | step-end
+//                                    |
+//                                    steps(<integer> [, [start | end]]?)
+//                                    |
+//                                    cubic-bezier(<number>, <number>, <number>, <number>)
+//
+//         ease        = cubic-bezier(0.25, 0.1, 0.25, 1.0)
+//         linear      = cubic-bezier(0.0,  0.0, 1.0,  1.0)
+//         ease-in     = cubic-bezier(0.42, 0,   1.0,  1.0)
+//         ease-out    = cubic-bezier(0,    0,   0.58, 1.0)
+//         ease-in-out = cubic-bezier(0.42, 0,   0.58, 1.0)
+//         step-start  = steps(1, start)
+//         step-end    = steps(1, end)
+//
+@mixin animation-timing-function($timing-functions...) {
+    @include prefixed-property(animation-timing-function, $timing-functions, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 0s
+//
+// Syntax: <time>#
+//
+@mixin animation-delay($delays...) {
+    @include prefixed-property(animation-delay, $delays, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: 1
+//
+// Syntax: <single-animation-iteration-count>#
+//
+//         where
+//
+//         <single-animation-iteration-count> = infinite | <number>
+//
+@mixin animation-iteration-count($iteration-counts...) {
+    @include prefixed-property(animation-iteration-count, $iteration-counts, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: normal
+//
+// Syntax: <single-animation-direction>#
+//
+//         where
+//
+//         <single-animation-direction> = normal | reverse | alternate | alternate-reverse
+//
+@mixin animation-direction($directions...) {
+    @include prefixed-property(animation-direction, $directions, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: none
+//
+// Syntax: <single-animation-fill-mode>#
+//
+//         where
+//
+//         <single-animation-fill-mode> = none | forwards | backwards | both
+//
+@mixin animation-fill-mode($fill-modes...) {
+    @include prefixed-property(animation-fill-mode, $fill-modes, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}
+
+// Initial: running
+//
+// Syntax: <single-animation-play-state>#
+//
+//         where
+//
+//         <single-animation-play-state> = running | paused
+//
+@mixin animation-play-state($play-states...) {
+    @include prefixed-property(animation-play-state, $play-states, (
+        -webkit,
+        -moz,
+        -o,
+        '',
+    ));
+}

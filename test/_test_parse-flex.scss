@@ -1,0 +1,20 @@
+@import "../functions/parse-flex";
+
+@debug __parse-flex((1, 2, auto))            == null;
+@debug __parse-flex(())                    == null;
+@debug __parse-flex(1 2 3 4)               == null;
+@debug __parse-flex(none)                  == none;
+@debug __parse-flex(none UNEXPECTEDVALUE)  == null;
+@debug __parse-flex(1)                     == ('grow': 1, 'shrink': 1, 'basis': auto);
+@debug __parse-flex(1 2)                   == ('grow': 1, 'shrink': 2, 'basis': auto);
+@debug __parse-flex(1 2 3px)               == ('grow': 1, 'shrink': 2, 'basis': 3px);
+@debug __parse-flex(1 2 UNEXPECTEDVALUE)   == null;
+@debug __parse-flex(1 3px)                 == ('grow': 1, 'shrink': 1, 'basis': 3px);
+@debug __parse-flex(1 3px UNEXPECTEDVALUE) == null;
+@debug __parse-flex(1 UNEXPECTEDVALUE)     == null;
+@debug __parse-flex(3px)                   == ('grow': 0, 'shrink': 1, 'basis': 3px);
+@debug __parse-flex(3px 1)                 == ('grow': 1, 'shrink': 1, 'basis': 3px);
+@debug __parse-flex(3px 1 2)               == ('grow': 1, 'shrink': 2, 'basis': 3px);
+@debug __parse-flex(3px 1 UNEXPECTEDVALUE) == null;
+@debug __parse-flex(3px UNEXPECTEDVALUE)   == null;
+@debug __parse-flex(UNEXPECTEDVALUE)       == null;

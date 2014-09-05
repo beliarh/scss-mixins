@@ -1,0 +1,12 @@
+@import "base-mixins";
+
+// Initial: flex-start
+//
+// Syntax: flex-start | flex-end | center | space-between | space-around
+//
+@mixin justify-content($value) {
+    @include prefixed-property(justify-content, $value, (
+        -webkit,
+        '',
+    ));
+}
